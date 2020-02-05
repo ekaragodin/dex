@@ -13,11 +13,12 @@ async function runCommand(args: string[]) {
     stderr: "piped",
     cwd
   });
-  await process.status();
+  const { code } = await process.status();
   const output = await process.output();
   const decoder = new TextDecoder();
 
   return {
+    code,
     output: decoder.decode(output).trim()
   };
 }
@@ -35,4 +36,9 @@ test(async function appendArgs() {
 test(async function runDefaultCommand() {
   const { output } = await runCommand([]);
   assertEquals(output, "default");
+});
+
+test(async function passReturnCodeFromProcess() {
+  const { code } = await runCommand(["qwe"]);
+  assertEquals(code, 127);
 });

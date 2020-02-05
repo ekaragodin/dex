@@ -1,4 +1,5 @@
 import { path, process } from "./deps.ts";
+import { ExecError } from './ExecError.ts';
 
 export async function run(): Promise<void> {
   const [command = "default", ...commandArgs] = Deno.args;
@@ -7,5 +8,9 @@ export async function run(): Promise<void> {
   const commands = await import(dexfile);
 
   const p = process.exec(`${commands[command]} ${commandArgs.join(" ")}`);
-  await p.status();
+  const { code } = await p.status();
+
+  if (code !== 0) {
+    throw new ExecError(code, `Command failed with exit code ${code}`);
+  }
 }
