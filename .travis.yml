@@ -11,4 +11,4 @@ install:
   - export PATH="$HOME/.deno/bin:$PATH"
 
 script:
-  - ./dex.ts test
+  - deno --allow-all ./dex.ts test
