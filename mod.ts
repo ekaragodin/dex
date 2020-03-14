@@ -10,7 +10,7 @@ export async function run(): Promise<void> {
   const p = process.exec(`${commands[command]} ${commandArgs.join(" ")}`);
   const { code } = await p.status();
 
-  if (code !== 0) {
+  if (code !== undefined && code !== 0) {
     throw new ExecError(code, `Command failed with exit code ${code}`);
   }
 }
